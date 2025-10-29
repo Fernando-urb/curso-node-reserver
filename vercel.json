@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "/app.js"
     }
-  ],
-  "env": {
-    "MONGODB_ATLAS": "@mongodb_atlas"
-  }
+  ]
 }
