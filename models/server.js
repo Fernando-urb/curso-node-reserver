@@ -1,40 +1,53 @@
 import express from "express";
 import cors from "cors";
 import router from "../routes/user_routes.js";
-
+import dbConnection from "../database/config.js";
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3000;
+    this.users = "/api/users";
+
+    //conectar a base de datos
+
+    this.conectarDb();
 
     //middelewares
     this.middelewares();
-    
-    this.users = "/api/users";
 
     //rutas de mi aplicacion
     this.routes();
   }
 
-  middelewares() {
+  async conectarDb() {
+    await dbConnection();
+  }
 
+  middelewares() {
     //cors
-    this.app.use(cors())
+    this.app.use(cors());
 
     //lectura y parceo del body
 
     this.app.use(express.json());
 
-
     //directorio publico
-    this.app.use(express.static("public"))
+    this.app.use(express.static("public"));
   }
 
   routes() {
-
-    this.app.use(this.users, router)
-  
+    // Ruta de prueba para verificar que el servidor funciona
+    this.app.get('/', (req, res) => {
+      res.json({
+        msg: 'API funcionando correctamente',
+        endpoints: {
+          users: '/api/users'
+        }
+      });
+    });
+    
+    this.app.use(this.users, router);
   }
   listen() {
     this.app.listen(this.port, () => {
