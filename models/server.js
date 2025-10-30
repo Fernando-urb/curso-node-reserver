@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import router from "../routes/user_routes.js";
+import userRoutes from "../routes/user_routes.js";
+import authRoutes from "../routes/auth.js";
 import dbConnection from "../database/config.js";
 
 class Server {
@@ -8,6 +9,7 @@ class Server {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.users = "/api/users";
+    this.auth = "/api/auth";
 
     //conectar a base de datos
 
@@ -42,13 +44,25 @@ class Server {
       res.json({
         msg: 'API funcionando correctamente',
         endpoints: {
-          users: '/api/users'
+          users: '/api/users',
+          auth: '/api/auth'
         }
       });
     });
-    
-    this.app.use(this.users, router);
+
+
+    this.app.use(this.users, userRoutes);
+    this.app.use(this.auth, authRoutes);
   }
+
+
+
+
+
+
+
+
+
   listen() {
     this.app.listen(this.port, () => {
       console.log("servidor corriendo en puerto ", this.port);

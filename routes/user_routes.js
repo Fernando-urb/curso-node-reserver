@@ -8,12 +8,15 @@ import {
 } from "../controllers/user_controllers.js";
 import { check } from "express-validator";
 import validarCampos from "../middlewares/validar_campos.js";
+import validarJWT from "../middlewares/validar_jwt.js";
+import {esAdminRol , tieneRole} from "../middlewares/validar_roles.js";
 import {
   esRoleValido,
   emailExiste,
   existeUserID,
 } from "../helpers/db_validators.js";
 import mongoose from "mongoose";
+
 
 const router = Router();
 
@@ -71,8 +74,12 @@ router.post(
 
 
 //delete = borrar informacion
-router.delete("/:id", [
-  check("id")
+router.delete("/:id",
+  [ validarJWT,
+    // esAdminRol,
+    tieneRole("ADMIN_ROLE" , "VENTAS_ROLE"),
+   
+    check("id")
       .customSanitizer((id) => id.trim()) // elimina \n y espacios
       .custom((id) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -81,10 +88,13 @@ router.delete("/:id", [
         return true;
       }),
     check("id").custom(existeUserID),
-    
-  validarCampos,
-  usuarioDelete,
-]);
+
+    validarCampos,
+    usuarioDelete,
+  ]);
+
+
+
 //patch = actualizar informacion parcialmente
 router.patch("/", usuarioPatch);
 

@@ -10,33 +10,34 @@ const UsuarioSchema = Schema({
     required: [true, "el correo es obligatorio"],
     unique: true,
   },
-    password: {
+  password: {
     type: String,
     required: [true, "La contraseña es obligatorio"],
   },
-    img: {
+  img: {
     type: String,
   },
-    rol: {
+  rol: {
     type: String,
     required: true,
-    enum:["ADMIN_ROLE" , "USER_ROLE"]
+    enum: ["ADMIN_ROLE", "USER_ROLE"]
   },
-    estado: {
-    type: String,
-    default:true
+  estado: {
+    type: Boolean,
+    default: true
   },
-    google: {
-    type: String,
-    default:false
+  google: {
+    type: Boolean,
+    default: false
   },
 
 });
 
-UsuarioSchema.methods.toJSON = function(){
-  const {__v , password, ...user}= this.toObject();
+UsuarioSchema.methods.toJSON = function () {
+  const { __v, password, _id, ...user } = this.toObject();
+  user.uid = _id;
   return user;
 }
 
 
-export default model ("Usuario" , UsuarioSchema);
+export default model("Usuario", UsuarioSchema);

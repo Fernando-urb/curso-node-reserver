@@ -66,21 +66,17 @@ export const usuarioPost = async (req, res) => {
 };
 
 
-
-
 export const usuarioDelete = async (req, res = response) => {
 
   const { id } = req.params;
 
-  // eliminar fisicamente 
-  // const usuario = await Usuario.findByIdAndDelete(id)
-  //cambiar el estado del usuario
 
   const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+  const usuarioAutenticado = req.usuario
 
   res.json({
 
-    usuario
+    usuario , usuarioAutenticado,
   });
 }
 export const usuarioPatch = (req, res = response) => {
