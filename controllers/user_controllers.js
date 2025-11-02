@@ -5,7 +5,7 @@ import bcryptjs from "bcryptjs"
 
 
 export const usuarioGet = async (req = request, res = response) => {
-  const { limite = 5, desde = 0 } = req.query;
+  const { limite = 50, desde = 0 } = req.query;
 
   const [total, usuarios] = await Promise.all([
     Usuario.countDocuments({ estado: true }),

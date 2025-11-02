@@ -2,7 +2,10 @@ import express from "express";
 import cors from "cors";
 import userRoutes from "../routes/user_routes.js";
 import authRoutes from "../routes/auth.js";
-import dbConnection from "../database/config.js";
+import catagoryRoutes from "../routes/categoryRoutes.js"
+import productosRoutes from "../routes/productosRoutes.js"
+import dbConnection from "../database/config.js"
+import buscar from "../routes/buscar.js";
 
 class Server {
   constructor() {
@@ -10,6 +13,10 @@ class Server {
     this.port = process.env.PORT || 3000;
     this.users = "/api/users";
     this.auth = "/api/auth";
+    this.categorias="/api/categorias";
+    this.productos="/api/productos";
+    this.buscar = "/api/buscar"
+
 
     //conectar a base de datos
 
@@ -45,7 +52,10 @@ class Server {
         msg: 'API funcionando correctamente',
         endpoints: {
           users: '/api/users',
-          auth: '/api/auth'
+          auth: '/api/auth',
+          categorias: "/api/categorias",
+          productos :"/api/productos",
+          buscar:"/api/buscar"
         }
       });
     });
@@ -53,6 +63,9 @@ class Server {
 
     this.app.use(this.users, userRoutes);
     this.app.use(this.auth, authRoutes);
+    this.app.use(this.categorias, catagoryRoutes);
+    this.app.use(this.productos, productosRoutes);
+    this.app.use(this.buscar , buscar)
   }
 
 
